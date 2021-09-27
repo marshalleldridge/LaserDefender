@@ -6,8 +6,12 @@ using UnityEngine.EventSystems;
 public class Player : MonoBehaviour
 {
     // config params
+    [Header("Player")]
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private float padding = 1f;
+    [SerializeField] private int health = 200;
+    
+    [Header ("Projectile")]
     [SerializeField] private GameObject laserPrefab;
     [SerializeField] private float projectileSpeed = 10f;
     [SerializeField] private float projectileFiringSpeed = .1f;
@@ -32,6 +36,23 @@ public class Player : MonoBehaviour
     {
         fire();
         Move();
+    }
+    
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        DamageDealer damageDealer = other.gameObject.GetComponent<DamageDealer>();
+        if (!damageDealer) {return;}
+        ProcessHit(damageDealer);
+    }
+
+    private void ProcessHit(DamageDealer damageDealer)
+    {
+        health -= damageDealer.GetDamage();
+        damageDealer.Hit();
+        if (health <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void fire()
