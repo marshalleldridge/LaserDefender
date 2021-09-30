@@ -68,6 +68,12 @@ public class Player : MonoBehaviour
         GameObject explosion = Instantiate(deathVFX, transform.position, transform.rotation);
         Destroy(explosion, durationOfExplosion);
         AudioSource.PlayClipAtPoint(deathSFX, Camera.main.transform.position, deathSoundVolume);
+        FindObjectOfType<Level>().LoadGameOver();
+    }
+
+    public int GetHealth()
+    {
+        return health;
     }
 
     private void fire()
